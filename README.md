@@ -5,3 +5,9 @@ Common utils classes for PHP
 - String class
 - Collection class
 - ToString Trait
+- Event Trait
+- Commandline Trait
+- Publicize Trait (use the magic __call() to make all methodds pseudo-public, for debugging)
+
+## DONE
+- ToString Trait

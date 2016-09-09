@@ -1,0 +1,10 @@
+{
+    "name": "alexandrewavelet/PHPUtils",
+    "description": "Set of utility PHP classes for any project",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "PhpUtils": "src"
+        }
+    }
+}
