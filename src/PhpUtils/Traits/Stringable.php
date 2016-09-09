@@ -2,16 +2,16 @@
 
 namespace PhpUtils\Traits;
 
-trait Stringable 
+trait Stringable
 {
-	abstract protected function toString();
+    abstract public function toString();
 
-	public function __toString()
-	{
-		try {
-			return $this->toString();
-		} catch (\Exception $e) {
-			return get_class($this);
-		}
-	}
+    public function __toString()
+    {
+        try {
+            return $this->toString();
+        } catch (\Exception $e) {
+            return get_class($this);
+        }
+    }
 }

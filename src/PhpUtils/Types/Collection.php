@@ -12,30 +12,35 @@ use PhpUtils\Traits\Stringable;
 
 class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
-	use Stringable;
+    use Stringable;
 
-	private $items;
+    private $items;
 
-	function __construct($items = [])
-	{
-		if (is_array($items)) {
-		    $this->items = $items;
-		} else {
-			throw new InvalidTypeException('Not an array');
-		}
-	}
+    function __construct($items = [])
+    {
+        if (is_array($items)) {
+            $this->items = $items;
+        } else {
+            throw new InvalidTypeException('Not an array');
+        }
+    }
 
-	public static function make($items = [])
-	{
-		return new static($items);
-	}
+    public static function make($items = [])
+    {
+        return new static($items);
+    }
 
-	public function filter(callable $callback = null)
+    public function filter(callable $callback = null)
     {
         if ($callback) {
             return new static(array_filter($this->items, $callback,  ARRAY_FILTER_USE_BOTH));
         }
         return new static(array_filter($this->items));
+    }
+
+    public function join($glue = ',')
+    {
+        return implode($glue, $this->items);
     }
 
     public function map(callable $callback)
@@ -46,10 +51,10 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         return new static(array_combine($keys, $items));
     }
 
-	protected function toString()
-	{
-		return $this->count().' elements';
-	}
+    public function toString()
+    {
+        return $this->count().' elements';
+    }
 
     public function offsetExists($offset)
     {
