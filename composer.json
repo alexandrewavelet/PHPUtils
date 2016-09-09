@@ -1,5 +1,5 @@
 {
-    "name": "alexandrewavelet/PHPUtils",
+    "name": "alexandrewavelet/php-utils",
     "description": "Set of utility PHP classes for any project",
     "license": "MIT",
     "autoload": {
