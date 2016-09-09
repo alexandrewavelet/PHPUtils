@@ -2,8 +2,6 @@
 
 namespace PhpUtils\Traits;
 
-use PhpUtils\Types\Str;
-
 trait Stringable 
 {
 	abstract protected function toString();
