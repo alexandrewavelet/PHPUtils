@@ -29,7 +29,7 @@ class Str
 		return new static($value);
 	}
 
-	private function toString()
+	protected function toString()
 	{
 		return $this->value;
 	}
