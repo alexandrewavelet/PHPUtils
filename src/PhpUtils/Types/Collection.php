@@ -12,25 +12,36 @@ use PhpUtils\Traits\Stringable;
 
 class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
-    use Stringable;
+	use Stringable;
 
-    private $items;
+	private $items;
 
-    function __construct($items = [])
+	function __construct($items = [])
+	{
+		if (is_array($items)) {
+		    $this->items = $items;
+		} else {
+			throw new InvalidTypeException('Not an array');
+		}
+	}
+
+	public static function make($items = [])
+	{
+		return new static($items);
+	}
+
+	public function add($item, $key = null)
     {
-        if (is_array($items)) {
-            $this->items = $items;
+        if (is_null($key)) {
+            $this->items[] = $item;
         } else {
-            throw new InvalidTypeException('Not an array');
+            $this->items[$key] = $item;
         }
+
+        return new static($this->items);
     }
 
-    public static function make($items = [])
-    {
-        return new static($items);
-    }
-
-    public function filter(callable $callback = null)
+	public function filter(callable $callback = null)
     {
         if ($callback) {
             return new static(array_filter($this->items, $callback,  ARRAY_FILTER_USE_BOTH));
@@ -38,7 +49,24 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         return new static(array_filter($this->items));
     }
 
-    public function join($glue = ',')
+    public function find(callable $callback = null)
+    {
+        $matches = $this->filter($callback)
+            ->toArray();
+
+        return array_pop($matches);
+    }
+
+    public function getItem($key)
+    {
+        if (array_key_exists($key, $this->items)) {
+            return $this->items[$key];
+        }
+
+        return null;
+    }
+
+    public function join($glue = ', ')
     {
         return implode($glue, $this->items);
     }
@@ -51,10 +79,35 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         return new static(array_combine($keys, $items));
     }
 
-    public function toString()
+    public function pop()
     {
-        return $this->count().' elements';
+        $temp = $this->items;
+        array_pop($temp);
+
+        return new static($temp);
     }
+
+    public function reverse()
+    {
+        $reversedKeys = array_reverse(
+            array_keys($this->items)
+        );
+        $reversedValues = array_reverse(
+            array_values($this->items)
+        );
+
+        return new static(array_combine($reversedKeys, $reversedValues));
+    }
+
+    public function toArray()
+    {
+        return $this->items;
+    }
+
+	public function toString()
+	{
+		return $this->count().' elements';
+	}
 
     public function offsetExists($offset)
     {
